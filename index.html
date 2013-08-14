@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>SO animate CSS3 transform - jsFiddle demo</title>
+
+    <script type='text/javascript' src='http://code.jquery.com/jquery-1.7.2.js'></script>
+
+    <style type='text/css'>
+      .foo {
+        width:100px;
+        height:100px;
+        border-spacing: 0;
+        background-color:red;
+        position: absolute;
+        margin-left: -50px;
+        margin-top: -50px;
+        border: 1px solid greenyellow;
+      }
+
+      .wrap {
+        border: 1px blue solid;
+      }
+
+      .horizontal {
+        width:150px;
+        height:100px;
+        margin-left: -75px;
+        margin-top: -50px;
+      }
+
+      .vertical {
+        width:100px;
+        height:150px;
+        margin-left: -50px;
+        margin-top: -75px;
+      }
+
+      .canvas {
+        width: 500px;
+        height: 500px;
+        border: 1px solid black;
+        position: relative;
+      }
+
+      .active {
+        margin-left: -75px;
+        margin-top: -75px;
+        border: 1px solid black;
+        z-index: 10;
+      }
+
+      .rotate-15 {
+        -webkit-transform : rotate(15deg);
+        -moz-transform : rotate(15deg);
+        transform : rotate(15deg);
+        border-spacing: 15px;
+      }
+      .rotate-25 {
+        -webkit-transform : rotate(25deg);
+        -moz-transform : rotate(25deg);
+        transform : rotate(25deg);
+      }
+      .rotate-35 {
+        -webkit-transform : rotate(35deg);
+        -moz-transform : rotate(35deg);
+        transform : rotate(35deg);
+        border-spacing: 35px;
+      }
+      .rotate-45 {
+        -webkit-transform : rotate(45deg);
+        -moz-transform : rotate(45deg);
+        transform : rotate(45deg);
+      }
+      .rotate-55 {
+        -webkit-transform : rotate(55deg);
+        -moz-transform : rotate(55deg);
+        transform : rotate(55deg);
+      }
+      .rotate-65 {
+        -webkit-transform : rotate(65deg);
+        -moz-transform : rotate(65deg);
+        transform : rotate(65deg);
+      }
+
+      .pos-1 {
+        left: 50px; top: 50px;
+      }
+      .pos-2 {
+        left: 50px; top: 150px;
+      }
+      .pos-3 {
+        left: 50px; top: 250px;
+      }
+      .pos-4 {
+        left: 50px; top: 350px;
+      }
+      .pos-5 {
+        left: 50px; top: 450px;
+      }
+      .pos-6 {
+        left: 150px; top: 450px;
+      }
+      .pos-7 {
+        left: 250px; top: 450px;
+      }
+      .pos-8 {
+        left: 350px; top: 450px;
+      }
+      .pos-9 {
+        left: 450px; top: 450px;
+      }
+      .pos-10 {
+        left: 450px; top: 350px;
+      }
+      .pos-11 {
+        left: 450px; top: 250px;
+      }
+      .pos-12 {
+        left: 450px; top: 150px;
+      }
+      .pos-13 {
+        left: 450px; top: 50px;
+      }
+      .pos-14 {
+        left: 350px; top: 50px;
+      }
+      .pos-15 {
+        left: 250px; top: 50px;
+      }
+      .pos-16 {
+        left: 150px; top: 50px;
+      }
+
+    </style>
+
+    <script type='text/javascript'>//<![CDATA[ 
+
+      function forward(e) {
+        var _ = $(this);
+        var d = _.data();
+        var p = {w: _.parent().width(), h: _.parent().height()};
+        var e = {w: _.width(), h: _.height()};
+        var pw = ts;
+
+        if (e.w / e.h > 1) {
+          pw = {w: ts.w, h: ts.h * e.h / e.w};
+        } else {
+          pw = {h: ts.h, w: ts.w * e.w / e.h};
+        }
+
+
+
+        var a = $('.foo.active');
+        if (a.length > 0) {
+          a.trigger("back");
+        }
+
+        _.data('position', _.position());
+        _.data('wh', e);
+        _.addClass('active');
+        _.animate({borderSpacing: 0, top: p.h / 2, left: p.w / 2, width: pw.w, height: pw.h}, {
+          step: function(now, fx) {
+            if (fx.prop == 'borderSpacing') {
+              _.css('-webkit-transform', 'rotate(' + now + 'deg)');
+              _.css('-moz-transform', 'rotate(' + now + 'deg)');
+              _.css('transform', 'rotate(' + now + 'deg)');
+            }
+          },
+          duration: 'slow'
+        }, 'linear');
+        _.unbind('click');
+        _.bind('click', back);
+        _.bind('back', back);
+      }
+
+      function back(e) {
+        var _ = $(this);
+        var d = _.data();
+        _.animate({borderSpacing: d.rotate, top: d.position.top, left: d.position.left, width: d.wh.w, height: d.wh.h}, {
+          step: function(now, fx) {
+            if (fx.prop == 'borderSpacing') {
+              _.css('-webkit-transform', 'rotate(' + now + 'deg)');
+              _.css('-moz-transform', 'rotate(' + now + 'deg)');
+              _.css('transform', 'rotate(' + now + 'deg)');
+            }
+          },
+          duration: 'slow'
+        }, 'linear');
+        _.removeClass('active');
+        _.unbind('click');
+        _.unbind('back');
+        _.bind('click', forward);
+
+      }
+
+      var ts = {
+        w: 200,
+        h: 200
+      };
+
+      $(document).ready(function() {
+        $('#foo').animate({borderSpacing: 0, top: 250, left: 250}, {
+          step: function(now, fx) {
+            if (fx.prop == 'borderSpacing') {
+              $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
+              $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
+              $(this).css('transform', 'rotate(' + now + 'deg)');
+            }
+          },
+          duration: 'slow'
+        }, 'linear');
+
+
+        $('.foo').not('.active').click(forward);
+
+      });//]]>  
+
+    </script>
+
+  </head>
+  <body>
+    <div class="canvas">
+      <div class="foo rotate-15 pos-2" data-id="1" data-rotate="15">Text1</div>
+      <div class="foo rotate-25 pos-4  horizontal" data-id="2" data-rotate="25">Text2</div>
+      <div class="foo rotate-35 pos-1 horizontal" data-id="3" data-rotate="35">Text3</div>
+      <div class="foo rotate-45 pos-3 vertical" data-id="4" data-rotate="45">Text4</div>
+      <div class="foo rotate-55 pos-5 horizontal" data-id="5" data-rotate="55">Text5</div>
+      <div class="foo rotate-25 pos-6 vertical" data-id="6" data-rotate="25">Text6</div>
+      <div class="foo rotate-35 pos-7" data-id="7" data-rotate="35">Text7</div>
+      <div class="foo rotate-45 pos-11 horizontal" data-id="8" data-rotate="45">Text8</div>
+      <div class="foo rotate-55 pos-13" data-id="9" data-rotate="55">Text9</div>
+      <div class="foo rotate-15 pos-16 vertical" data-id="10" data-rotate="15">Text10</div>
+      <div class="foo rotate-25 pos-15 horizontal" data-id="11" data-rotate="25">Text11</div>
+      <div class="foo rotate-35 pos-9 horizontal" data-id="12" data-rotate="35">Text12</div>
+      <div class="foo rotate-45 pos-14 horizontal" data-id="13" data-rotate="45">Text5</div>
+      <div class="foo rotate-55 pos-12 vertical" data-id="14" data-rotate="55">Text5</div>
+      <div class="foo rotate-15 pos-10" data-id="15" data-rotate="15">Text5</div>
+      <div class="foo rotate-25 pos-8 horizontal" data-id="65" data-rotate="25">Text5</div>
+    </div>
+
+    <button>Clck</button>
+  </body>
+
+
+</html>
+
